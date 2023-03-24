@@ -7,3 +7,4 @@ huggingface_hub
 sentencepiece
 protobuf<4
 timm
+-e git+https://github.com/thoklei/lucent.git@dev#egg=torch-lucent

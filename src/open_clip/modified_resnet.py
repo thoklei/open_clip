@@ -6,6 +6,8 @@ from torch.nn import functional as F
 
 from open_clip.utils import freeze_batch_norm_2d
 
+from lucent.modelzoo.inceptionv1.helper_layers import RedirectedReluLayer
+
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -16,17 +18,17 @@ class Bottleneck(nn.Module):
         # all conv layers have stride 1. an avgpool is performed after the second convolution when stride > 1
         self.conv1 = nn.Conv2d(inplanes, planes, 1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
-        self.act1 = nn.ReLU(inplace=True)
+        self.act1 = RedirectedReluLayer()
 
         self.conv2 = nn.Conv2d(planes, planes, 3, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(planes)
-        self.act2 = nn.ReLU(inplace=True)
+        self.act2 = RedirectedReluLayer()
 
         self.avgpool = nn.AvgPool2d(stride) if stride > 1 else nn.Identity()
 
         self.conv3 = nn.Conv2d(planes, planes * self.expansion, 1, bias=False)
         self.bn3 = nn.BatchNorm2d(planes * self.expansion)
-        self.act3 = nn.ReLU(inplace=True)
+        self.act3 = RedirectedReluLayer()
 
         self.downsample = None
         self.stride = stride
@@ -108,13 +110,13 @@ class ModifiedResNet(nn.Module):
         # the 3-layer stem
         self.conv1 = nn.Conv2d(3, width // 2, kernel_size=3, stride=2, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(width // 2)
-        self.act1 = nn.ReLU(inplace=True)
+        self.act1 = RedirectedReluLayer()
         self.conv2 = nn.Conv2d(width // 2, width // 2, kernel_size=3, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(width // 2)
-        self.act2 = nn.ReLU(inplace=True)
+        self.act2 = RedirectedReluLayer()
         self.conv3 = nn.Conv2d(width // 2, width, kernel_size=3, padding=1, bias=False)
         self.bn3 = nn.BatchNorm2d(width)
-        self.act3 = nn.ReLU(inplace=True)
+        self.act3 = RedirectedReluLayer()
         self.avgpool = nn.AvgPool2d(2)
 
         # residual layers
