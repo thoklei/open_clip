@@ -31,6 +31,7 @@ class Bottleneck(nn.Module):
         self.act3 = RedirectedReluLayer()
 
         self.downsample = None
+        self.shortcut = nn.Identity()
         self.stride = stride
 
         if stride > 1 or inplanes != planes * Bottleneck.expansion:
@@ -52,7 +53,7 @@ class Bottleneck(nn.Module):
         if self.downsample is not None:
             identity = self.downsample(x)
 
-        out += identity
+        out = self.shortcut(out + identity)
         out = self.act3(out)
         return out
 
