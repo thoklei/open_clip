@@ -7,4 +7,3 @@ huggingface_hub
 sentencepiece
 protobuf<4
 timm
-torch-lucent @ git+https://github.com/zimmerrol/lucent.git@main
